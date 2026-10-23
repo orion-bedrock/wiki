@@ -1,0 +1,32 @@
+---
+title: Orion Bedrock
+description: Documentation for Orion Bedrock, an infrastructure ecosystem for Minecraft Bedrock Edition.
+template: splash
+hero:
+  tagline: Infrastructure for Minecraft Bedrock Edition, with two execution modes that work together.
+  actions:
+    - text: Server Mode
+      link: /en/server/
+      icon: right-arrow
+    - text: Proxy Mode
+      link: /en/proxy/
+      icon: right-arrow
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Orion Bedrock is an infrastructure ecosystem for Minecraft Bedrock Edition, built around two execution modes.
+
+<CardGrid>
+	<Card title="Server Mode" icon="server">
+		A standalone Minecraft Bedrock server instance with gameplay, server management and development APIs for plugins.
+
+		[Learn more →](/en/server/)
+	</Card>
+	<Card title="Proxy Mode" icon="link">
+		A network gateway that connects multiple Orion Bedrock Server instances and distributes players and load.
+
+		[Learn more →](/en/proxy/)
+	</Card>
+</CardGrid>
