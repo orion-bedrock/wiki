@@ -5,6 +5,6 @@ description: Una instancia independiente de servidor Minecraft Bedrock, con func
 
 Server Mode ejecuta Orion Bedrock como una instancia independiente de servidor Minecraft Bedrock. Incluye funcionalidad de juego, gestión del servidor y APIs de desarrollo para crear plugins.
 
-[Continuar con Proxy Mode →](/es/proxy/)
+[Continuar con Proxy Mode →](../proxy/)
 
 <!-- TODO: contenido pendiente -->

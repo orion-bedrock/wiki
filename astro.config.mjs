@@ -2,10 +2,14 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
+const base = '/wiki';
+
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://orion-bedrock.github.io',
+	base,
     redirects: {
-        '/': '/en/',
+        '/': `${base}/en/`,
     },
 	integrations: [
 		starlight({

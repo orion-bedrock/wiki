@@ -5,6 +5,6 @@ description: A standalone Minecraft Bedrock server instance with gameplay, serve
 
 Server Mode runs Orion Bedrock as a standalone Minecraft Bedrock server instance. It includes gameplay, server management, and development APIs for building plugins.
 
-[Continue with Proxy Mode →](/en/proxy/)
+[Continue with Proxy Mode →](../proxy/)
 
 <!-- TODO: contenido pendiente -->

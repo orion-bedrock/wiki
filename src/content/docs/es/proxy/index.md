@@ -9,6 +9,6 @@ Proxy Mode es un gateway de red que conecta varias instancias de Orion Bedrock S
 La compatibilidad solo está garantizada con Orion Bedrock Server. No se garantiza la compatibilidad con software de servidor o proxy de terceros.
 :::
 
-[Continuar con Server Mode →](/es/server/)
+[Continuar con Server Mode →](../server/)
 
 <!-- TODO: contenido pendiente -->
