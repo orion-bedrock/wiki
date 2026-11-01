@@ -1,0 +1,262 @@
+---
+title: Getting started
+description: "Orion server plugins: the project, the plugin class, `plugin.json`, the folder of a plugin, publishing and installing it."
+sidebar:
+  order: 1
+---
+
+import { FileTree, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+This page takes you from an empty folder to a plugin running on an Orion server: the project, the plugin class, the description `plugin.json`, publishing the native library and installing it.
+
+:::caution[Clone Orion first]
+The SDK is not public yet and is not on NuGet. This guide references `Orion.Server.Sdk` and `Orion.Sdk.Generators` from a local clone of the Orion repository; without that clone, the project does not restore or build.
+:::
+
+<Steps>
+
+1. **Get the SDK.** Clone the Orion repository and keep it next to your plugin project; the project references the server SDK and its generator from there.
+2. [Create the project](#create-the-project) and reference the server SDK.
+3. [Write the plugin class](#write-the-plugin-class) and its first command and event handler.
+4. [Describe it in plugin.json](#describe-it-in-pluginjson).
+5. [Publish](#publish) the native library for the platform of the server.
+6. [Install](#install) it and check the [first run](#first-run).
+
+</Steps>
+
+## What you need
+
+| What | Why |
+|---|---|
+| The .NET 10 SDK | To build and publish the plugin ([download](https://learn.microsoft.com/dotnet/core/install/)) |
+| The Orion repository (required) | Contains the server SDK and its generator. The project references both directly; without the clone, restore fails. A NuGet package will replace these references later |
+| The native toolchain | Native AOT links with the C toolchain of your platform ([prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites)) |
+| An Orion server | To run the plugin: the folder with its `server.json` |
+
+:::caution
+Native AOT builds for the operating system it runs on: publish on Windows for a Windows server, on Linux for a Linux server.
+:::
+
+## Create the project
+
+A plugin is a class library. Next to a clone of the repository in `Orion/`:
+
+```shell
+dotnet new classlib -n Arena -f net10.0
+```
+
+Replace `Arena/Arena.csproj` with:
+
+```xml title="Arena/Arena.csproj"
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <!-- A native plugin: published with Native AOT as a shared library. -->
+        <PublishAot>true</PublishAot>
+        <NativeLib>Shared</NativeLib>
+        <!-- Required by the SDK: the entry point of the plugin uses unsafe code. -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- The SDK of the server, and its build checks as an analyzer (they also add the entry point of the plugin). -->
+        <ProjectReference Include="../Orion/src/Orion.Server.Sdk/Orion.Server.Sdk.csproj" />
+        <ProjectReference Include="../Orion/src/Orion.Sdk.Generators/Orion.Sdk.Generators.csproj"
+                          OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+        <!-- Optional: the [LoggerMessage] source generator for the logs of the plugin. -->
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+    </ItemGroup>
+
+    <!-- plugin.json and the texts of the plugin go next to the library. -->
+    <ItemGroup>
+        <None Include="plugin.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <None Include="lang/**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+
+</Project>
+```
+
+| Setting | Why it is there |
+|---|---|
+| `PublishAot`, `NativeLib` | `dotnet publish` makes a native shared library that Orion opens; `dotnet build` still makes a normal one |
+| `AllowUnsafeBlocks` | Required by the SDK: the entry point of the plugin uses unsafe code |
+| `Orion.Server.Sdk` | The types of the server: `GameServer`, `Player`, `World`, the events… |
+| `Orion.Sdk.Generators` | Checks the plugin when you build (`ORSG` errors), and adds its entry point and the registration of its handlers |
+| `ImplicitUsings` | The examples of these pages assume it (`System`, `System.Linq`, `System.Threading.Tasks`…) |
+
+Reference `Orion.Server.Sdk` only: a plugin that references the SDKs of the server and of the proxy does not build (`ORSG012`).
+
+## Write the plugin class
+
+Every plugin has exactly one class that derives from `ServerPlugin`, named by `[assembly: OrionPlugin]`. Delete `Class1.cs` and add `ArenaPlugin.cs`:
+
+```csharp title="Arena/ArenaPlugin.cs"
+using Orion.Sdk;
+using Orion.Sdk.Server;
+using Orion.Sdk.Server.Events;
+
+[assembly: OrionPlugin(typeof(Arena.ArenaPlugin))]
+
+namespace Arena;
+
+public sealed partial class ArenaPlugin : ServerPlugin
+{
+    public override void OnEnable() =>
+        Context.Commands.Register("arena", spec => spec
+            .Description("Tells where the arena is.")
+            .Executes(call => call.Reply("The arena is at 0, 64, 0.")));
+
+    [EventHandler]
+    public void OnJoin(PlayerJoinEvent e) => e.Player.SendMessage($"Welcome to the arena, {e.Player.Name}!");
+}
+```
+
+| Rule | Otherwise |
+|---|---|
+| One `[assembly: OrionPlugin(typeof(...))]` per library | `ORSG003` |
+| The class derives from `ServerPlugin`, is not abstract nor generic | `ORSG004` |
+| It has a public constructor without parameters | `ORSG005` |
+| A class with `[EventHandler]` methods is `partial` | `ORSG008` |
+| The project is a class library | `ORSG006` |
+
+:::tip
+The plugin class is also a listener: its `[EventHandler]` methods are registered before `OnEnable` runs, so it already hears events raised while `OnEnable` runs ([Events](../events/)). `Context` is everything Orion tells the plugin about itself ([The life of a plugin](../lifecycle/)).
+:::
+
+## Describe it in plugin.json
+
+Add `plugin.json` next to the project file:
+
+```json title="Arena/plugin.json"
+{
+  "id": "arena",
+  "version": "1.0.0",
+  "name": "Arena",
+  "description": "A small arena with a command and a welcome.",
+  "authors": ["You"],
+  "main": "Arena",
+  "application": "server"
+}
+```
+
+| Key | Required | Value |
+|---|---|---|
+| `id` | Yes | 1 to 64 lowercase letters, digits or `_`; the name of the folder of the plugin |
+| `version` | Yes | Three numbers: `major.minor.patch` |
+| `application` | Yes | `server`; a server skips a plugin of the proxy, with a line in its log |
+| `name` | No | A name to show |
+| `description` | No | What it does |
+| `authors` | No | A list of names |
+| `main` | No | The file name of the library without its extension; the id by default. Set it when the names differ (`Arena` for `Arena.dll`), since Linux file names are case-sensitive |
+| `dependencies` | No | `{ "id": "minimum version" }`: plugins that must be loaded first, at that version or later |
+| `soft_dependencies` | No | `{ "id": "minimum version" }`: plugins that load first when they are installed; they never stop this one |
+
+Keys are snake_case; comments and trailing commas are accepted and unknown keys are ignored. A mistake is reported in the log of the server with the path of the file and the key. [The full manifest reference](../../../../sdk/plugin-json/) covers dependencies and the folder layout.
+
+## Publish
+
+Build to check your code (a normal library, no native step), then publish for the platform of the server:
+
+```shell
+dotnet build
+```
+
+<Tabs>
+<TabItem label="Windows">
+
+```shell
+dotnet publish -c Release -r win-x64
+```
+
+</TabItem>
+<TabItem label="Linux (x64)">
+
+```shell
+dotnet publish -c Release -r linux-x64
+```
+
+</TabItem>
+<TabItem label="Linux (ARM64)">
+
+```shell
+dotnet publish -c Release -r linux-arm64
+```
+
+</TabItem>
+</Tabs>
+
+`-r` is the runtime identifier: `win-x64`, `linux-x64`, `linux-arm64` or `osx-arm64`. The publish folder that dotnet prints holds `Arena.dll` (`Arena.so` on Linux, `Arena.dylib` on macOS), a native library that exports `orion_plugin_entry`, with `plugin.json` and `lang/` next to it.
+
+## Install
+
+A server keeps its plugins in `plugins/` next to its `server.json`, one folder per plugin named by its id:
+
+<FileTree>
+
+- plugins/
+  - arena/
+    - plugin.json
+    - native/
+      - win-x64/Arena.dll
+      - linux-x64/Arena.so
+    - lang/
+      - en_US/arena.blang
+      - es_MX/arena.blang
+    - textures/
+    - models/
+    - packs/
+    - data/
+
+</FileTree>
+
+Copy `plugin.json` and `lang/` to `plugins/arena/` and the library to `plugins/arena/native/<rid>/`. The `lang/` folder holds the texts of the plugin ([Text and translations](../text-and-translations/)); `textures/`, `models/` and `packs/` are for custom content ([Custom content](../../platform/custom-content/)); `data/` is created by Orion and is the data directory of the plugin.
+
+For the samples of the repository, `samples/publish-plugin.ps1` does both steps on Windows:
+
+```shell
+powershell -NoProfile -ExecutionPolicy Bypass -File samples/publish-plugin.ps1 -Server C:\Orion -Plugin Hello
+```
+
+The section `plugins` of `server.json` says where plugins are and how strict Orion is with them:
+
+```json title="server.json"
+{
+  "plugins": {
+    "directory": "plugins",
+    "disabled": ["old_shop"],
+    "max_failures_per_minute": 20
+  }
+}
+```
+
+| Key | Default | What |
+|---|---|---|
+| `directory` | `plugins` | The folder of the plugins |
+| `disabled` | `[]` | Ids of plugins that stay off without being removed |
+| `max_failures_per_minute` | `20` | How many faults a plugin may have in a minute; one more disables it ([Errors and limits](../../platform/errors-and-limits/)) |
+
+## First run
+
+Start the server. Its log shows each plugin it loads, then the lines your plugin writes under the category `plugin.arena`:
+
+```text title="Console"
+1 plugins found in plugins
+Plugin arena 1.0.0 loaded
+Plugin arena enabled
+```
+
+Join the server: you get the welcome, and `/arena` answers. When something goes wrong, the log says which plugin failed and why ([The life of a plugin](../lifecycle/), Failures).
+
+:::note
+To change the plugin, publish it again, replace its files and restart the server: a library is never unloaded while the server runs.
+:::
+
+## Next
+
+- [The life of a plugin](../lifecycle/): what to do in `OnLoad`, `OnEnable` and `OnDisable`.
+- [Events](../events/) and [Commands](../commands/): the two ways players reach your code.
+- `samples/Hello` in the repository: this page as a complete plugin.

@@ -1,0 +1,42 @@
+---
+title: Proxy plugins
+description: "Build Orion proxy plugins with Orion.Proxy.Sdk: project setup, lifecycle, commands, servers, transfers, balancers and Sentinel."
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+A proxy plugin runs inside an Orion proxy, the gateway players connect to before they reach the servers behind it. It uses `Orion.Proxy.Sdk`: the players of the network, the servers and groups, transfers between them, balancers that choose a server, Sentinel (the guard of the proxy) and maintenance.
+
+<Badge text="Orion Proxy SDK 0.5" variant="note" />
+
+Read the first group in order; the rest is a reference you open when you need it.
+
+## Basics
+
+| Page | What it covers |
+|------|----------------|
+| [Getting started](basics/getting-started/) | The project, the plugin class, `plugin.json`, publishing and installing on a proxy |
+| [The life of a plugin](basics/lifecycle/) | `OnLoad`, `OnEnable`, `OnDisable`, the context of the plugin, dependencies and failures |
+| [Logging](basics/logging/) | Writing to the log of the proxy |
+| [Threads](basics/threads/) | Where your code runs, and why proxy plugins must be thread-safe |
+| [Events](basics/events/) | Handling the events of the proxy: priorities, canceling, changing them; every event |
+| [Commands](basics/commands/) | Commands of the network, run from any server |
+| [Scheduled tasks](basics/scheduler/) | Tasks that run later or repeat |
+| [Text and translations](basics/text-and-translations/) | `Text`, the `lang` folder and texts in the language of each player |
+
+## The network
+
+| Page | What it covers |
+|------|----------------|
+| [Players](network/players/) | The players of the proxy: who they are, messages, permissions, disconnecting them |
+| [Servers and groups](network/servers-and-groups/) | The servers and groups behind the proxy, their states, servers added at run time |
+| [Transfers](network/transfers/) | Moving players and parties between servers, fallbacks and the first server |
+| [Balancers](network/balancers/) | Choosing the server of a group for players |
+| [Sentinel](network/sentinel/) | Blocking addresses and rules that check connections, logins, transfers and commands |
+| [Maintenance](network/maintenance/) | Maintenance of the proxy, of a group or of a server |
+| [Forms](network/forms/) | Forms of buttons, questions and fields shown by the proxy |
+| [Messaging](network/messaging/) | Messages between your plugin and the plugins of the servers |
+| [Errors and limits](network/errors-and-limits/) | Exceptions, faults, crashes and what Native AOT does not allow |
+| [Versions](network/versions/) | Which proxies a plugin runs on, and what a new SDK version means for it |
+
+The proxy has no worlds, blocks or entities: a plugin that changes the game itself is a server plugin. The two work together through messages.

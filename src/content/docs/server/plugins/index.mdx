@@ -1,0 +1,90 @@
+---
+title: Server plugins
+description: "Build Orion server plugins with Orion.Server.Sdk: project setup, lifecycle, events, commands, worlds, entities, custom content and more."
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+A server plugin runs inside an Orion server and uses `Orion.Server.Sdk`: the game, its worlds, players, blocks, items and entities, the events of the game, and the commands, tasks, forms and screens a plugin adds.
+
+<Badge text="Orion Server SDK 0.15" variant="note" />
+
+Read the first group in order; the rest is a reference you open when you need it.
+
+## Basics
+
+| Page | What it covers |
+|------|----------------|
+| [Getting started](basics/getting-started/) | The project, the plugin class, `plugin.json`, the folder of a plugin, publishing and installing it |
+| [The life of a plugin](basics/lifecycle/) | `OnLoad`, `OnEnable`, `OnDisable`, the context of the plugin, dependencies and failures |
+| [Logging](basics/logging/) | Writing to the log of the server |
+| [Threads and async code](basics/threads/) | The thread of each world, moving work between worlds, `async` and `await` |
+| [Events](basics/events/) | Handling the events of the game: priorities, canceling, changing them; every event |
+| [Commands](basics/commands/) | Commands with arguments, overloads, permissions and asynchronous handlers |
+| [Scheduled tasks](basics/scheduler/) | Tasks that run later or repeat |
+| [Text and translations](basics/text-and-translations/) | `Text`, the `lang` folder and showing texts in the language of each player |
+
+## Players
+
+| Page | What it covers |
+|------|----------------|
+| [Players](players/players/) | Finding players, who they are, moving them, their game mode, food, experience, time and weather |
+| [Permissions](players/permissions/) | Named permissions, operators and abilities |
+| [Skins and the player list](players/skins-and-player-list/) | Skins, and what each player sees in its player list |
+
+## Worlds and blocks
+
+| Page | What it covers |
+|------|----------------|
+| [Worlds](worlds/worlds/) | Finding, creating, loading and unloading worlds; spawn, time, weather, border, biomes |
+| [World rules](worlds/world-rules/) | Game rules, difficulty, combat, explosions, experience, enchanting, redstone and crafting |
+| [World queries](worlds/world-queries/) | Ray casts, collisions, redstone power, chunks, vibrations and scheduled block ticks |
+| [Blocks](worlds/blocks/) | Block types and states, reading and changing blocks |
+| [Block entities](worlds/block-entities/) | Chests, furnaces, signs, banners and the other blocks that keep data |
+| [Block batches and patterns](worlds/block-batches-and-patterns/) | Large changes over several ticks, copies of areas, and patterns players build |
+
+## Items
+
+| Page | What it covers |
+|------|----------------|
+| [Items and inventories](items/items-and-inventories/) | Item stacks, enchanted and named items, inventories, armor and the offhand |
+| [Inventory snapshots](items/inventory-snapshots/) | Saving everything a player carries and giving it back later |
+
+## Entities
+
+| Page | What it covers |
+|------|----------------|
+| [Entities](entities/entities/) | Spawning, finding and changing entities; riding, visibility, data and properties |
+| [Entity kinds](entities/entity-kinds/) | The classes of the SDK for each kind of entity: TNT, arrows, minecarts, orbs… |
+| [AI and goals](entities/ai-and-goals/) | The goals of mobs, writing your own, navigation and controls |
+| [NPCs](entities/npcs/) | Human NPCs with skins, and mobs that stand still |
+| [Projectiles](entities/projectiles/) | Shooting projectiles and handling their hits |
+| [Effects](entities/effects/) | Status effects and potions |
+| [Damage](entities/damage/) | Hurting, healing and killing, damage sources and the damage events |
+
+## What players see
+
+| Page | What it covers |
+|------|----------------|
+| [Forms](player-ui/forms/) | Forms of buttons, questions and fields |
+| [Menus](player-ui/menus/) | Chest menus with buttons, and menus with pages |
+| [The HUD](player-ui/hud/) | Titles, the action bar, notifications and hiding parts of the HUD |
+| [Boss bars](player-ui/boss-bars/) | Boss bars |
+| [Scoreboards](player-ui/scoreboards/) | Sidebars, scoreboards and objectives |
+| [Floating texts](player-ui/floating-texts/) | Texts that float in a world, for everyone or for each player |
+| [Chat](player-ui/chat/) | Channels, filters, mutes and the name a player shows in the chat |
+| [Camera and cinematics](player-ui/camera-and-cinematics/) | Camera moves, fades, presets, paths and cinematics |
+| [Sounds and particles](player-ui/sounds-and-particles/) | Sounds and particle effects |
+
+## Platform
+
+| Page | What it covers |
+|------|----------------|
+| [Custom content](platform/custom-content/) | Items, blocks, mobs, effects, enchantments, recipes, fuels, patterns and camera presets of your own |
+| [Catalogs](platform/catalogs/) | Every block, item, entity type, effect, enchantment, potion, recipe and biome of the server |
+| [Messaging](platform/messaging/) | Messages between your plugin and the plugins of the proxy |
+| [Persistence](platform/persistence/) | Keeping data: the data directory, data on entities and worlds, saved values |
+| [Errors and limits](platform/errors-and-limits/) | Exceptions, faults, crashes and what Native AOT does not allow |
+| [Versions](platform/versions/) | Which servers a plugin runs on, and what a new SDK version means for it |
+
+The vanilla identifiers of the game (`ItemIds.DiamondSword`, `BlockIds.Stone`, `EntityIds.Zombie`, `SoundIds`, `ParticleIds`, `EffectIds`, `EnchantmentIds`, `BiomeIds`, `PotionIds`) are constants of the namespace `Bedrock.Identifiers`, which the SDK brings with it. Wherever a page takes an identifier, a string such as `"minecraft:diamond_sword"` works too.

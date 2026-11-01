@@ -1,32 +1,259 @@
 ---
 title: Orion Bedrock
-description: Documentation for Orion Bedrock, an infrastructure ecosystem for Minecraft Bedrock Edition.
+description: "Documentation for Orion Bedrock: server plugins, proxy plugins and the Native AOT plugin SDK."
 template: splash
 hero:
-  tagline: Infrastructure for Minecraft Bedrock Edition, with two execution modes that work together.
+  tagline: Run a Bedrock server. Put a network in front of it. Extend both with C#.
+  image:
+    html: |
+      <svg viewBox="0 0 360 360" role="presentation" aria-hidden="true">
+        <circle class="orbit-glow" cx="180" cy="180" r="168" />
+        <g class="orbit-rings">
+          <ellipse cx="180" cy="180" rx="148" ry="62" transform="rotate(-28 180 180)" />
+          <ellipse cx="180" cy="180" rx="148" ry="62" transform="rotate(32 180 180)" />
+          <circle cx="180" cy="180" r="112" stroke-dasharray="1 8" />
+        </g>
+        <g class="orbit-links">
+          <path d="M180 180 52 126" />
+          <path d="M180 180 308 132" />
+          <path d="M180 180 228 308" />
+        </g>
+        <g class="orbit-nodes">
+          <circle class="node node-server" cx="52" cy="126" r="11" />
+          <circle class="node node-proxy" cx="308" cy="132" r="11" />
+          <circle class="node node-sdk" cx="228" cy="308" r="11" />
+        </g>
+        <g class="orbit-star" transform="translate(180 180)">
+          <path d="M0 -52 12 -12 52 0 12 12 0 52 -12 12 -52 0 -12 -12 Z" />
+          <circle class="orbit-core" r="9" />
+        </g>
+      </svg>
   actions:
-    - text: Server Mode
-      link: server/
+    - text: Start with Server
+      link: server/plugins/basics/getting-started/
       icon: right-arrow
-    - text: Proxy Mode
-      link: proxy/
+    - text: Explore the SDK
+      link: sdk/
       icon: right-arrow
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Badge, LinkButton } from '@astrojs/starlight/components';
 
-Orion Bedrock is an infrastructure ecosystem for Minecraft Bedrock Edition, built around two execution modes.
+<div class="home-meta">
+	<span class="home-meta-label">Covers</span>
+	<Badge text="Server SDK 0.15" variant="note" />
+	<Badge text="Proxy SDK 0.5" variant="note" />
+	<Badge text="Native AOT" variant="success" />
+</div>
 
-<CardGrid>
-	<Card title="Server Mode" icon="server">
-		A standalone Minecraft Bedrock server instance with gameplay, server management and development APIs for plugins.
+<p class="home-eyebrow">Start here</p>
 
-		[Learn more →](server/)
-	</Card>
-	<Card title="Proxy Mode" icon="link">
-		A network gateway that connects multiple Orion Bedrock Server instances and distributes players and load.
+## Choose your path
 
-		[Learn more →](proxy/)
-	</Card>
-</CardGrid>
+Three ways into the documentation, depending on what you are building.
+
+<div class="home-paths">
+	<a class="home-path home-path-server" href="server/plugins/">
+		<span class="home-path-top">
+			<span class="home-path-icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+					<rect x="3" y="4" width="18" height="7" rx="2" />
+					<rect x="3" y="13" width="18" height="7" rx="2" />
+					<path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6" />
+				</svg>
+			</span>
+			<span class="home-path-tag">Server</span>
+		</span>
+		<span class="home-path-title">Server plugins</span>
+		<span class="home-path-copy">Worlds, players, blocks, entities and custom content for a standalone Bedrock server.</span>
+		<span class="home-path-link"><span>Server documentation</span><span class="home-path-arrow" aria-hidden="true">→</span></span>
+	</a>
+	<a class="home-path home-path-proxy" href="proxy/plugins/">
+		<span class="home-path-top">
+			<span class="home-path-icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+					<circle cx="5" cy="12" r="2.5" />
+					<circle cx="19" cy="6" r="2.5" />
+					<circle cx="19" cy="18" r="2.5" />
+					<path d="m7.3 11 9.4-4M7.3 13l9.4 4" />
+				</svg>
+			</span>
+			<span class="home-path-tag">Proxy</span>
+		</span>
+		<span class="home-path-title">Proxy plugins</span>
+		<span class="home-path-copy">Transfers, balancers, Sentinel and network commands for the gateway in front of your servers.</span>
+		<span class="home-path-link"><span>Proxy documentation</span><span class="home-path-arrow" aria-hidden="true">→</span></span>
+	</a>
+	<a class="home-path home-path-sdk" href="sdk/">
+		<span class="home-path-top">
+			<span class="home-path-icon" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+					<path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14" />
+				</svg>
+			</span>
+			<span class="home-path-tag">Shared</span>
+		</span>
+		<span class="home-path-title">Plugin SDK</span>
+		<span class="home-path-copy">Native AOT, <code>plugin.json</code>, the lifecycle and the reference shared by both applications.</span>
+		<span class="home-path-link"><span>SDK overview</span><span class="home-path-arrow" aria-hidden="true">→</span></span>
+	</a>
+</div>
+
+<p class="home-eyebrow">Quickstart</p>
+
+## Build your first plugin
+
+The same four moves for a server or a proxy plugin, starting with the SDK.
+
+<div class="home-sdk-note">
+	<span class="home-sdk-badge" aria-hidden="true">SDK</span>
+	<div>
+		<strong>Get the SDK before you create the project.</strong>
+		<p>The SDK is not public yet and is not on NuGet: clone the Orion repository and keep <code>Orion.Server.Sdk</code> or <code>Orion.Proxy.Sdk</code>, plus <code>Orion.Sdk.Generators</code>, next to your plugin. Without those project references, restore and build fail.</p>
+	</div>
+	<a class="home-sdk-link" href="sdk/">SDK overview <span aria-hidden="true">→</span></a>
+</div>
+
+<div class="home-tracks">
+	<article class="home-track home-track-server">
+		<header class="home-track-head">
+			<span class="home-track-kicker">Server</span>
+			<h3>Server plugin</h3>
+			<p>Runs inside the game server and has access to worlds, players, blocks, items and entities.</p>
+		</header>
+		<ol class="home-track-steps">
+			<li><span class="home-step-text"><strong>Get the SDK.</strong> Clone Orion and reference <code>Orion.Server.Sdk</code> and <code>Orion.Sdk.Generators</code>.</span></li>
+			<li><span class="home-step-text"><strong>Create the project.</strong> A .NET 10 class library with <code>PublishAot</code>, <code>NativeLib</code> and unsafe code enabled.</span></li>
+			<li><span class="home-step-text"><strong>Write the plugin.</strong> One <code>ServerPlugin</code>, one <code>[assembly: OrionPlugin]</code> and its <code>plugin.json</code>.</span></li>
+			<li><span class="home-step-text"><strong>Publish and install.</strong> Put the native library in <code>plugins/&lt;id&gt;/native/&lt;rid&gt;/</code>.</span></li>
+		</ol>
+		<a class="home-track-link" href="server/plugins/basics/getting-started/">Open the server guide <span aria-hidden="true">→</span></a>
+	</article>
+	<article class="home-track home-track-proxy">
+		<header class="home-track-head">
+			<span class="home-track-kicker">Proxy</span>
+			<h3>Proxy plugin</h3>
+			<p>Runs in the gateway and handles players, servers, groups, transfers, balancers and Sentinel.</p>
+		</header>
+		<ol class="home-track-steps">
+			<li><span class="home-step-text"><strong>Get the SDK.</strong> Clone Orion and reference <code>Orion.Proxy.Sdk</code> and <code>Orion.Sdk.Generators</code>.</span></li>
+			<li><span class="home-step-text"><strong>Create the project.</strong> A .NET 10 class library with <code>PublishAot</code> and unsafe code enabled.</span></li>
+			<li><span class="home-step-text"><strong>Write the plugin.</strong> One <code>ProxyPlugin</code>, <code>"application": "proxy"</code> and its <code>plugin.json</code>.</span></li>
+			<li><span class="home-step-text"><strong>Publish and install.</strong> Put the native library in <code>plugins/&lt;id&gt;/native/&lt;rid&gt;/</code> next to <code>proxy.json</code>.</span></li>
+		</ol>
+		<a class="home-track-link" href="proxy/plugins/basics/getting-started/">Open the proxy guide <span aria-hidden="true">→</span></a>
+	</article>
+</div>
+
+<div class="home-example">
+	<div class="home-example-head">
+		<div>
+			<p class="home-eyebrow">A server plugin</p>
+			<h3>One class is enough to start.</h3>
+		</div>
+		<p>The generator adds the entry point, <code>plugin.json</code> describes the plugin, and the SDK supplies <code>ServerPlugin</code>, commands and events.</p>
+	</div>
+	<div class="home-code">
+
+```csharp title="ArenaPlugin.cs"
+using Orion.Sdk;
+using Orion.Sdk.Server;
+using Orion.Sdk.Server.Events;
+
+[assembly: OrionPlugin(typeof(Arena.ArenaPlugin))]
+
+namespace Arena;
+
+public sealed partial class ArenaPlugin : ServerPlugin
+{
+    public override void OnEnable() =>
+        Context.Commands.Register("arena", spec => spec
+            .Description("Where is the arena?")
+            .Executes(call => call.Reply("The arena is at 0, 64, 0.")));
+
+    [EventHandler]
+    public void OnJoin(PlayerJoinEvent e) =>
+        e.Player.SendMessage($"Welcome, {e.Player.Name}!");
+}
+```
+
+	</div>
+</div>
+
+<p class="home-eyebrow">Reference</p>
+
+## Explore the API
+
+Six entry points into the reference, from gameplay to the network.
+
+<div class="home-api">
+	<a class="home-api-card home-api-server" href="server/plugins/basics/events/">
+		<span class="home-api-meta"><span>Server / Basics</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
+		<span class="home-api-title">Events</span>
+		<span class="home-api-copy">React to joins, chat, blocks, damage and every other game event.</span>
+	</a>
+	<a class="home-api-card home-api-server" href="server/plugins/basics/commands/">
+		<span class="home-api-meta"><span>Server / Basics</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
+		<span class="home-api-title">Commands</span>
+		<span class="home-api-copy">Arguments, overloads, permissions and asynchronous handlers.</span>
+	</a>
+	<a class="home-api-card home-api-server" href="server/plugins/worlds/worlds/">
+		<span class="home-api-meta"><span>Server / Worlds</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
+		<span class="home-api-title">Worlds and blocks</span>
+		<span class="home-api-copy">Load worlds, set rules, query blocks and change the terrain.</span>
+	</a>
+	<a class="home-api-card home-api-server" href="server/plugins/platform/custom-content/">
+		<span class="home-api-meta"><span>Server / Platform</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
+		<span class="home-api-title">Custom content</span>
+		<span class="home-api-copy">Items, blocks, mobs, effects, enchantments and recipes of your own.</span>
+	</a>
+	<a class="home-api-card home-api-proxy" href="proxy/plugins/network/transfers/">
+		<span class="home-api-meta"><span>Proxy / Network</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
+		<span class="home-api-title">Transfers</span>
+		<span class="home-api-copy">Move players and parties between servers, with fallbacks.</span>
+	</a>
+	<a class="home-api-card home-api-proxy" href="proxy/plugins/network/sentinel/">
+		<span class="home-api-meta"><span>Proxy / Network</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
+		<span class="home-api-title">Sentinel</span>
+		<span class="home-api-copy">Block addresses and guard connections, logins, transfers and commands.</span>
+	</a>
+</div>
+
+<p class="home-eyebrow">Copy and run</p>
+
+## Start from a sample
+
+Four complete plugins in the repository, not fragments: project, manifest, texts and code.
+
+<div class="home-samples">
+	<a class="home-sample home-sample-server" href="sdk/samples/">
+		<span class="home-sample-app">Server</span>
+		<span class="home-sample-name">Hello</span>
+		<span class="home-sample-copy">The life of a plugin, events, a command that waits and a repeating task.</span>
+		<span class="home-sample-link">Open sample <span aria-hidden="true">→</span></span>
+	</a>
+	<a class="home-sample home-sample-server" href="sdk/samples/">
+		<span class="home-sample-app">Server</span>
+		<span class="home-sample-name">Gems</span>
+		<span class="home-sample-copy">A custom item, blocks, recipes, an effect, an enchantment and a mob, in two languages.</span>
+		<span class="home-sample-link">Open sample <span aria-hidden="true">→</span></span>
+	</a>
+	<a class="home-sample home-sample-server" href="sdk/samples/">
+		<span class="home-sample-app">Server</span>
+		<span class="home-sample-name">HubCompass</span>
+		<span class="home-sample-copy">Messages from a server plugin to the proxy, and back.</span>
+		<span class="home-sample-link">Open sample <span aria-hidden="true">→</span></span>
+	</a>
+	<a class="home-sample home-sample-proxy" href="sdk/samples/">
+		<span class="home-sample-app">Proxy</span>
+		<span class="home-sample-name">Hub</span>
+		<span class="home-sample-copy">A server selector, a balancer, a delayed welcome and messages from the servers.</span>
+		<span class="home-sample-link">Open sample <span aria-hidden="true">→</span></span>
+	</a>
+</div>
+
+<div class="home-samples-actions">
+	<LinkButton href="sdk/samples/" variant="primary" icon="right-arrow">Browse the samples</LinkButton>
+	<LinkButton href="server/plugins/basics/getting-started/" variant="minimal" icon="right-arrow">Build from scratch</LinkButton>
+</div>

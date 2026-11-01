@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { sidebar } from "./src/sidebar.mjs";
 
 const base = "/wiki";
 
@@ -11,6 +12,15 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Orion Bedrock",
+      favicon: "/orion.png",
+      editLink: {
+        baseUrl: "https://github.com/orion-bedrock/wiki/edit/release/",
+      },
+      customCss: [
+        "./src/styles/home.css",
+        "./src/styles/sidebar.css",
+        "./src/styles/content.css",
+      ],
       social: [
         {
           icon: "github",
@@ -23,18 +33,7 @@ export default defineConfig({
           href: "https://discord.gg/NE6TWXz4xU",
         },
       ],
-      sidebar: [
-        {
-          label: "Server",
-          translations: { es: "Servidor" },
-          items: [{ autogenerate: { directory: "server" } }],
-        },
-        {
-          label: "Proxy",
-          translations: { es: "Proxy" },
-          items: [{ autogenerate: { directory: "proxy" } }],
-        },
-      ],
+      sidebar,
     }),
   ],
 });

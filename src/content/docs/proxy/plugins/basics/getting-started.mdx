@@ -1,0 +1,167 @@
+---
+title: Getting started
+description: "Orion proxy plugins: the project, the plugin class, `plugin.json`, publishing and installing on a proxy."
+sidebar:
+  order: 1
+---
+
+import { FileTree, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+This page takes you from an empty folder to a plugin running on an Orion proxy: the project, the plugin class, the description `plugin.json`, publishing the native library and installing it.
+
+:::caution[Clone Orion first]
+The SDK is not public yet and is not on NuGet. This guide references `Orion.Proxy.Sdk` and `Orion.Sdk.Generators` from a local clone of the Orion repository; without that clone, the project does not restore or build.
+:::
+
+<Steps>
+
+1. **Get the SDK.** Clone the Orion repository and keep it next to your plugin project; the project references the proxy SDK and its generator from there.
+2. [Create the project](#create-the-project) and reference the proxy SDK.
+3. [Write the plugin class](#write-the-plugin-class) and its first command and event handler.
+4. [Describe it in plugin.json](#describe-it-in-pluginjson).
+5. [Publish](#publish-and-install) the native library for the platform of the proxy.
+6. Install it and check the [first run](#first-run).
+
+</Steps>
+
+## What you need
+
+| What | Why |
+|---|---|
+| The .NET 10 SDK | To build and publish the plugin ([download](https://learn.microsoft.com/dotnet/core/install/)) |
+| The Orion repository (required) | Contains the proxy SDK and its generator. The project references both directly; without the clone, restore fails. A NuGet package will replace these references later |
+| The native toolchain | Native AOT links with the C toolchain of your platform ([prerequisites](https://learn.microsoft.com/dotnet/core/deploying/native-aot/#prerequisites)) |
+| An Orion proxy | To run the plugin: the folder with its `proxy.json` |
+
+:::caution
+Native AOT builds for the operating system it runs on: publish on Windows for a Windows proxy, on Linux for a Linux proxy.
+:::
+
+## Create the project
+
+```shell
+dotnet new classlib -n Network -f net10.0
+```
+
+Replace `Network/Network.csproj` with:
+
+```xml title="Network/Network.csproj"
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <!-- A native plugin: published with Native AOT as a shared library. -->
+        <PublishAot>true</PublishAot>
+        <NativeLib>Shared</NativeLib>
+        <!-- Required by the SDK: the entry point of the plugin uses unsafe code. -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- The SDK of the proxy, and its build checks as an analyzer (they also add the entry point of the plugin). -->
+        <ProjectReference Include="../Orion/src/Orion.Proxy.Sdk/Orion.Proxy.Sdk.csproj" />
+        <ProjectReference Include="../Orion/src/Orion.Sdk.Generators/Orion.Sdk.Generators.csproj"
+                          OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+        <!-- Optional: the [LoggerMessage] source generator for the logs of the plugin. -->
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="plugin.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <None Include="lang/**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+
+</Project>
+```
+
+Reference `Orion.Proxy.Sdk` only: a plugin that references the SDKs of the proxy and of the server does not build (`ORSG012`). The settings are explained in [the server getting started](../../../../server/plugins/basics/getting-started/); they are the same for both applications.
+
+## Write the plugin class
+
+```csharp title="Network/NetworkPlugin.cs"
+using Orion.Sdk;
+using Orion.Sdk.Proxy;
+using Orion.Sdk.Proxy.Events;
+
+[assembly: OrionPlugin(typeof(Network.NetworkPlugin))]
+
+namespace Network;
+
+public sealed partial class NetworkPlugin : ProxyPlugin
+{
+    public override void OnEnable() =>
+        Context.Commands.Register("hub", spec => spec
+            .Description("Takes you to the lobby.")
+            .Executes(async call => await call.Player.TransferAsync("lobby")));
+
+    [EventHandler]
+    public static void OnJoined(PlayerJoinedEvent e) => e.Player.SendMessage($"Welcome to {ProxyServer.Current.Name}!");
+}
+```
+
+One class per library derives from `ProxyPlugin` and is named by `[assembly: OrionPlugin]`; it is `partial` when it has `[EventHandler]` or `[MessageHandler]` methods, and has a public constructor without parameters. The errors the build reports are in [Errors and limits](../../network/errors-and-limits/).
+
+## Describe it in plugin.json
+
+```json title="Network/plugin.json"
+{
+  "id": "network",
+  "version": "1.0.0",
+  "name": "Network",
+  "description": "A /hub command and a welcome.",
+  "authors": ["You"],
+  "main": "Network",
+  "application": "proxy"
+}
+```
+
+`"application": "proxy"` is what makes it a plugin of the proxy: a server skips it, and a proxy skips the plugins of a server, each with a line in its log. The other keys (`id`, `version`, `main`, `dependencies`, `soft_dependencies`…) are those of a server plugin; [the full manifest reference](../../../../sdk/plugin-json/) covers them.
+
+## Publish and install
+
+<Tabs>
+<TabItem label="Windows">
+
+```shell
+dotnet publish -c Release -r win-x64
+```
+
+</TabItem>
+<TabItem label="Linux">
+
+```shell
+dotnet publish -c Release -r linux-x64
+```
+
+</TabItem>
+</Tabs>
+
+A proxy keeps its plugins in `plugins/` next to its `proxy.json`, one folder per plugin named by its id:
+
+<FileTree>
+
+- plugins/
+  - network/
+    - plugin.json
+    - native/linux-x64/Network.so
+    - lang/
+    - data/
+
+</FileTree>
+
+For the samples of the repository, `samples/publish-plugin.ps1 -Proxy <folder of the proxy> -Plugin Hub` publishes and installs on Windows. The section `plugins` of `proxy.json` has the same keys as on a server: `directory`, `disabled` and `max_failures_per_minute` (20 by default). See [plugin.json](../../../../sdk/plugin-json/) for the folder layout and the host section.
+
+:::note
+Commands of plugins need the commands of the proxy on: `enable_commands` of `proxy.json` (on by default).
+:::
+
+## First run
+
+Start the proxy: its log shows `Plugin network 1.0.0 loaded`, then `Plugin network enabled`, then the lines of the plugin under `plugin.network`. Join through the proxy: you get the welcome, and `/hub` takes you to the lobby group.
+
+To change the plugin, publish it again, replace its files and restart the proxy.
+
+`samples/Hub` in the repository is a complete proxy plugin: a server selector, a balancer, a delayed welcome and messages from the servers.

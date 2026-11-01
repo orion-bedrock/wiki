@@ -1,0 +1,286 @@
+/*
+ * Interior documentation pages.
+ *
+ * The splash page has its own visual system in home.css; every rule here is
+ * scoped to pages without a hero so the two layouts cannot drift into each
+ * other.
+ */
+
+html:not([data-has-hero]) {
+	--docs-border-soft: color-mix(in srgb, var(--sl-color-gray-5) 30%, transparent);
+	--docs-border: color-mix(in srgb, var(--sl-color-gray-5) 58%, transparent);
+	--docs-surface: color-mix(in srgb, var(--sl-color-gray-6) 68%, var(--sl-color-bg));
+	--docs-surface-strong: var(--sl-color-gray-6);
+}
+
+/* Page title and reading rhythm. */
+
+html:not([data-has-hero]) .content-panel h1 {
+	font-size: clamp(2.1rem, 1.6rem + 1.5vw, 2.625rem);
+	line-height: 1.12;
+	letter-spacing: -0.04em;
+	text-wrap: balance;
+}
+
+html:not([data-has-hero]) .sl-markdown-content {
+	font-size: var(--sl-text-base);
+}
+
+html:not([data-has-hero]) .sl-markdown-content > p:first-child {
+	color: var(--sl-color-gray-2);
+	font-size: 1.0625rem;
+	line-height: 1.72;
+}
+
+html:not([data-has-hero]) .sl-markdown-content p,
+html:not([data-has-hero]) .sl-markdown-content li {
+	line-height: 1.72;
+}
+
+html:not([data-has-hero]) .sl-markdown-content :where(p, li) {
+	text-wrap: pretty;
+}
+
+html:not([data-has-hero]) .sl-markdown-content h2 {
+	margin-top: 3.1rem;
+	font-size: clamp(1.55rem, 1.38rem + 0.45vw, 1.85rem);
+	line-height: 1.28;
+	letter-spacing: -0.03em;
+	text-wrap: balance;
+}
+
+html:not([data-has-hero]) .sl-markdown-content h3 {
+	margin-top: 2.2rem;
+	font-size: clamp(1.2rem, 1.12rem + 0.2vw, 1.35rem);
+	line-height: 1.35;
+	letter-spacing: -0.02em;
+	text-wrap: balance;
+}
+
+html:not([data-has-hero]) .sl-markdown-content h2:first-child,
+html:not([data-has-hero]) .sl-markdown-content h3:first-child {
+	margin-top: 0;
+}
+
+html:not([data-has-hero]) .sl-markdown-content :where(h1, h2, h3, h4) {
+	scroll-margin-top: 6rem;
+}
+
+/* Links and inline code. */
+
+html:not([data-has-hero]) .sl-markdown-content :where(p, li, td, th) a {
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 0.06em;
+	text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+
+html:not([data-has-hero]) .sl-markdown-content :where(p, li, td, th) a:hover {
+	text-decoration-color: currentColor;
+}
+
+html:not([data-has-hero]) .sl-markdown-content :not(pre) > code {
+	padding: 0.12em 0.36em;
+	border: 1px solid var(--docs-border-soft);
+	border-radius: 0.35rem;
+	background: var(--sl-color-bg-inline-code);
+	color: var(--sl-color-white);
+	font-size: 0.84em;
+	overflow-wrap: anywhere;
+}
+
+/* Wide reference tables scroll inside their own bordered surface. */
+
+html:not([data-has-hero]) .sl-markdown-content table {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	margin-block: 1.4rem;
+	border: 1px solid var(--docs-border);
+	border-radius: 0.8rem;
+	background: var(--docs-surface);
+	border-collapse: separate;
+	border-spacing: 0;
+	overflow-x: auto;
+	scrollbar-color: var(--sl-color-gray-5) transparent;
+	scrollbar-width: thin;
+	-webkit-overflow-scrolling: touch;
+	font-size: var(--sl-text-sm);
+	line-height: 1.5;
+}
+
+html:not([data-has-hero]) .sl-markdown-content th,
+html:not([data-has-hero]) .sl-markdown-content td {
+	padding: 0.7rem 0.85rem;
+	vertical-align: top;
+}
+
+html:not([data-has-hero]) .sl-markdown-content th {
+	border-bottom: 1px solid var(--docs-border);
+	background: var(--docs-surface-strong);
+	color: var(--sl-color-white);
+	font-size: var(--sl-text-xs);
+	font-weight: 600;
+	letter-spacing: 0.055em;
+	text-transform: uppercase;
+}
+
+html:not([data-has-hero]) .sl-markdown-content td {
+	border-top: 1px solid var(--docs-border-soft);
+}
+
+html:not([data-has-hero]) .sl-markdown-content tbody tr:first-child td {
+	border-top: 0;
+}
+
+html:not([data-has-hero]) .sl-markdown-content tbody tr {
+	transition: background-color 120ms ease;
+}
+
+html:not([data-has-hero]) .sl-markdown-content tbody tr:hover {
+	background: color-mix(in srgb, var(--sl-color-accent-low) 22%, transparent);
+}
+
+html:not([data-has-hero]) .sl-markdown-content td:first-child {
+	color: var(--sl-color-white);
+	font-weight: 500;
+}
+
+/* Keep identifiers such as plugin.json keys and SDK names readable. */
+html:not([data-has-hero]) .sl-markdown-content table code {
+	white-space: nowrap;
+}
+
+@media (max-width: 50rem) {
+	html:not([data-has-hero]) .sl-markdown-content th,
+	html:not([data-has-hero]) .sl-markdown-content td {
+		min-width: 8rem;
+	}
+}
+
+/* Code blocks read as a single framed surface. */
+
+html:not([data-has-hero]) .expressive-code {
+	margin-block: 1.35rem;
+}
+
+html:not([data-has-hero]) .expressive-code .frame {
+	border: 1px solid var(--docs-border);
+	border-radius: 0.8rem;
+	overflow: hidden;
+}
+
+html:not([data-has-hero]) .expressive-code pre {
+	scrollbar-color: var(--sl-color-gray-5) transparent;
+	scrollbar-width: thin;
+}
+
+/* Asides match the cards and tables instead of floating on the page. */
+
+html:not([data-has-hero]) .starlight-aside {
+	border: 1px solid var(--docs-border);
+	border-inline-start-width: 3px;
+	border-radius: 0.8rem;
+	padding: 1rem 1.1rem;
+}
+
+html:not([data-has-hero]) .starlight-aside--caution {
+	border-inline-start-color: var(--sl-color-orange);
+}
+
+html:not([data-has-hero]) .starlight-aside--tip {
+	border-inline-start-color: var(--sl-color-green);
+}
+
+html:not([data-has-hero]) .starlight-aside--note {
+	border-inline-start-color: var(--sl-color-blue);
+}
+
+html:not([data-has-hero]) .starlight-aside__title {
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+
+/* Version badges sit on one tidy line. */
+
+html:not([data-has-hero]) .sl-markdown-content p:has(> .sl-badge) {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.45rem;
+	margin-block: 1rem 0;
+}
+
+html:not([data-has-hero]) .sl-badge {
+	border-radius: 999rem;
+	font-size: 0.68rem;
+	letter-spacing: 0.055em;
+	padding: 0.25rem 0.55rem;
+}
+
+/* Starlight cards on the SDK landing page follow the same surface language. */
+
+html:not([data-has-hero]) .card-grid {
+	gap: 1rem;
+	margin-block: 1.5rem;
+}
+
+html:not([data-has-hero]) .card-grid .card {
+	display: flex;
+	flex-direction: column;
+	padding: 1.3rem;
+	border: 1px solid var(--docs-border);
+	border-radius: 0.9rem;
+	background: var(--docs-surface);
+	transition:
+		border-color 160ms ease,
+		transform 160ms ease;
+}
+
+html:not([data-has-hero]) .card-grid .card:hover {
+	border-color: var(--sl-color-accent);
+	transform: translateY(-2px);
+}
+
+html:not([data-has-hero]) .card-grid .card .title {
+	align-items: center;
+	gap: 0.65rem;
+	color: var(--sl-color-white);
+	font-weight: 650;
+	letter-spacing: -0.015em;
+}
+
+html:not([data-has-hero]) .card-grid .card .icon {
+	color: var(--sl-color-text-accent);
+}
+
+html:not([data-has-hero]) .card-grid .card > :last-child {
+	margin-top: auto;
+}
+
+/* Previous and next pages use the same quiet border treatment. */
+
+html:not([data-has-hero]) .pagination-links a {
+	border: 1px solid var(--docs-border);
+	border-radius: 0.8rem;
+	background: var(--docs-surface);
+	transition: border-color 160ms ease;
+}
+
+html:not([data-has-hero]) .pagination-links a:hover {
+	border-color: var(--sl-color-accent);
+}
+
+html:not([data-has-hero]) .pagination-links .link-title {
+	color: var(--sl-color-white);
+	font-weight: 600;
+}
+
+/* Open sidebar groups are visually stronger than the collapsed ones. */
+
+html:not([data-has-hero]) .sidebar-content summary:hover {
+	background-color: var(--docs-surface);
+}
+
+html:not([data-has-hero]) .sidebar-content details[open] > summary .large {
+	color: var(--sl-color-white);
+}

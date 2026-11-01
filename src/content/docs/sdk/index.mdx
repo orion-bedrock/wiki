@@ -1,0 +1,78 @@
+---
+title: Plugin SDK
+description: Write Orion plugins in C# with Orion.Server.Sdk or Orion.Proxy.Sdk, published as Native AOT shared libraries.
+sidebar:
+  order: 1
+---
+
+import { Badge, Card, CardGrid } from '@astrojs/starlight/components';
+
+A plugin adds features to Orion without changing Orion itself: commands, minigames, menus, custom items, a balancer for your network, a rule that keeps bots out. You write it in C#, Orion loads it when it starts, and it talks to Orion through an SDK: a set of ordinary C# types (`Player`, `World`, `Server`…) with methods and events.
+
+<Badge text="Orion Server SDK 0.15" variant="note" /> <Badge text="Orion Proxy SDK 0.5" variant="note" />
+
+:::caution[SDK not public yet]
+The SDK is not publicly available yet. Until it is published, reference it from a local clone of the Orion repository, as described in [server getting started](../server/plugins/basics/getting-started/) and [proxy getting started](../proxy/plugins/basics/getting-started/).
+:::
+
+<CardGrid>
+	<Card title="Server plugins" icon="server">
+		The game, its worlds, players, blocks, items and entities.
+
+		[Server plugin docs →](../server/plugins/)
+	</Card>
+	<Card title="Proxy plugins" icon="link">
+		The network in front of the servers: players, transfers, balancers and Sentinel.
+
+		[Proxy plugin docs →](../proxy/plugins/)
+	</Card>
+	<Card title="Native compilation" icon="rocket">
+		Supported platforms, toolchains, publishing and the AOT limits.
+
+		[Read the native compilation guide →](native-aot/)
+	</Card>
+	<Card title="plugin.json" icon="setting">
+		The manifest of a plugin: id, version, dependencies and application.
+
+		[Manifest reference →](plugin-json/)
+	</Card>
+</CardGrid>
+
+## Two applications, two SDKs
+
+Orion runs as two applications, and a plugin is written for one of them:
+
+| Application | What it is | A plugin can | SDK |
+|---|---|---|---|
+| [Server](../server/plugins/) | A Minecraft Bedrock server: worlds, players, blocks, items, mobs | Handle game events, add commands, change blocks and entities, show forms and menus, add items, blocks and mobs | `Orion.Server.Sdk` |
+| [Proxy](../proxy/plugins/) | The gateway in front of several servers: players connect to it, and it moves them between servers and groups | Choose where players go, move them between servers, guard logins, put servers into maintenance, add network commands | `Orion.Proxy.Sdk` |
+
+A plugin references one SDK, never both. Plugins of a server and plugins of its proxy can still work together: they exchange messages about a player.
+
+## How a plugin runs
+
+- A plugin is a .NET class library published with **Native AOT** as a native shared library (`.dll`, `.so` or `.dylib`). It does not need a .NET runtime on the machine and starts instantly.
+- Orion opens the library once, when it starts, and calls your plugin class at each step of its life: `OnLoad`, `OnEnable` and `OnDisable`.
+- Everything else happens through the SDK: you read and change the objects of Orion, register commands and tasks, and handle events. What you register is removed for you when the plugin is disabled.
+- An exception your code throws never brings Orion down: it is logged, and a plugin that fails too often is disabled.
+- A plugin is updated by replacing its files and restarting Orion; libraries are never unloaded while Orion runs.
+
+## Start here
+
+1. Follow [Getting started](../server/plugins/basics/getting-started/) for a server plugin, or [Getting started](../proxy/plugins/basics/getting-started/) for a proxy plugin.
+2. Read [The life of a plugin](../server/plugins/basics/lifecycle/) to know what to do at each step.
+3. Keep [Native compilation](native-aot/) and [Errors and limits](errors/) open while you build.
+4. Use [plugin.json](plugin-json/) when you add dependencies or change the manifest.
+
+## Samples
+
+The repository has complete plugins under `samples/`:
+
+| Sample | Application | Shows |
+|---|---|---|
+| `Hello` | Server | The life of a plugin, events, a command that waits, a repeating task |
+| `Gems` | Server | Custom content: an item, blocks, recipes, an effect, an enchantment and a mob, in two languages |
+| `HubCompass` | Server | Messages to the proxy and back |
+| `Hub` | Proxy | A server selector form, a balancer, a delayed welcome and messages from the servers |
+
+[What each sample shows →](samples/)
