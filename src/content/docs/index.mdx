@@ -30,10 +30,10 @@ hero:
       </svg>
   actions:
     - text: Start with Server
-      link: server/plugins/basics/getting-started/
+      link: /wiki/server/plugins/basics/getting-started/
       icon: right-arrow
     - text: Explore the SDK
-      link: sdk/
+      link: /wiki/sdk/
       icon: right-arrow
       variant: minimal
 ---
@@ -54,7 +54,7 @@ import { Badge, LinkButton } from '@astrojs/starlight/components';
 Three ways into the documentation, depending on what you are building.
 
 <div class="home-paths">
-	<a class="home-path home-path-server" href="server/plugins/">
+	<a class="home-path home-path-server" href="/wiki/server/plugins/">
 		<span class="home-path-top">
 			<span class="home-path-icon" aria-hidden="true">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -69,7 +69,7 @@ Three ways into the documentation, depending on what you are building.
 		<span class="home-path-copy">Worlds, players, blocks, entities and custom content for a standalone Bedrock server.</span>
 		<span class="home-path-link"><span>Server documentation</span><span class="home-path-arrow" aria-hidden="true">→</span></span>
 	</a>
-	<a class="home-path home-path-proxy" href="proxy/plugins/">
+	<a class="home-path home-path-proxy" href="/wiki/proxy/plugins/">
 		<span class="home-path-top">
 			<span class="home-path-icon" aria-hidden="true">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -85,7 +85,7 @@ Three ways into the documentation, depending on what you are building.
 		<span class="home-path-copy">Transfers, balancers, Sentinel and network commands for the gateway in front of your servers.</span>
 		<span class="home-path-link"><span>Proxy documentation</span><span class="home-path-arrow" aria-hidden="true">→</span></span>
 	</a>
-	<a class="home-path home-path-sdk" href="sdk/">
+	<a class="home-path home-path-sdk" href="/wiki/sdk/">
 		<span class="home-path-top">
 			<span class="home-path-icon" aria-hidden="true">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -112,7 +112,7 @@ The same four moves for a server or a proxy plugin, starting with the SDK.
 		<strong>Get the SDK before you create the project.</strong>
 		<p>The SDK is not public yet and is not on NuGet: clone the Orion repository and keep <code>Orion.Server.Sdk</code> or <code>Orion.Proxy.Sdk</code>, plus <code>Orion.Sdk.Generators</code>, next to your plugin. Without those project references, restore and build fail.</p>
 	</div>
-	<a class="home-sdk-link" href="sdk/">SDK overview <span aria-hidden="true">→</span></a>
+	<a class="home-sdk-link" href="/wiki/sdk/">SDK overview <span aria-hidden="true">→</span></a>
 </div>
 
 <div class="home-tracks">
@@ -128,7 +128,7 @@ The same four moves for a server or a proxy plugin, starting with the SDK.
 			<li><span class="home-step-text"><strong>Write the plugin.</strong> One <code>ServerPlugin</code>, one <code>[assembly: OrionPlugin]</code> and its <code>plugin.json</code>.</span></li>
 			<li><span class="home-step-text"><strong>Publish and install.</strong> Put the native library in <code>plugins/&lt;id&gt;/native/&lt;rid&gt;/</code>.</span></li>
 		</ol>
-		<a class="home-track-link" href="server/plugins/basics/getting-started/">Open the server guide <span aria-hidden="true">→</span></a>
+		<a class="home-track-link" href="/wiki/server/plugins/basics/getting-started/">Open the server guide <span aria-hidden="true">→</span></a>
 	</article>
 	<article class="home-track home-track-proxy">
 		<header class="home-track-head">
@@ -142,7 +142,7 @@ The same four moves for a server or a proxy plugin, starting with the SDK.
 			<li><span class="home-step-text"><strong>Write the plugin.</strong> One <code>ProxyPlugin</code>, <code>"application": "proxy"</code> and its <code>plugin.json</code>.</span></li>
 			<li><span class="home-step-text"><strong>Publish and install.</strong> Put the native library in <code>plugins/&lt;id&gt;/native/&lt;rid&gt;/</code> next to <code>proxy.json</code>.</span></li>
 		</ol>
-		<a class="home-track-link" href="proxy/plugins/basics/getting-started/">Open the proxy guide <span aria-hidden="true">→</span></a>
+		<a class="home-track-link" href="/wiki/proxy/plugins/basics/getting-started/">Open the proxy guide <span aria-hidden="true">→</span></a>
 	</article>
 </div>
 
@@ -188,32 +188,32 @@ public sealed partial class ArenaPlugin : ServerPlugin
 Six entry points into the reference, from gameplay to the network.
 
 <div class="home-api">
-	<a class="home-api-card home-api-server" href="server/plugins/basics/events/">
+	<a class="home-api-card home-api-server" href="/wiki/server/plugins/basics/events/">
 		<span class="home-api-meta"><span>Server / Basics</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
 		<span class="home-api-title">Events</span>
 		<span class="home-api-copy">React to joins, chat, blocks, damage and every other game event.</span>
 	</a>
-	<a class="home-api-card home-api-server" href="server/plugins/basics/commands/">
+	<a class="home-api-card home-api-server" href="/wiki/server/plugins/basics/commands/">
 		<span class="home-api-meta"><span>Server / Basics</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
 		<span class="home-api-title">Commands</span>
 		<span class="home-api-copy">Arguments, overloads, permissions and asynchronous handlers.</span>
 	</a>
-	<a class="home-api-card home-api-server" href="server/plugins/worlds/worlds/">
+	<a class="home-api-card home-api-server" href="/wiki/server/plugins/worlds/worlds/">
 		<span class="home-api-meta"><span>Server / Worlds</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
 		<span class="home-api-title">Worlds and blocks</span>
 		<span class="home-api-copy">Load worlds, set rules, query blocks and change the terrain.</span>
 	</a>
-	<a class="home-api-card home-api-server" href="server/plugins/platform/custom-content/">
+	<a class="home-api-card home-api-server" href="/wiki/server/plugins/platform/custom-content/">
 		<span class="home-api-meta"><span>Server / Platform</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
 		<span class="home-api-title">Custom content</span>
 		<span class="home-api-copy">Items, blocks, mobs, effects, enchantments and recipes of your own.</span>
 	</a>
-	<a class="home-api-card home-api-proxy" href="proxy/plugins/network/transfers/">
+	<a class="home-api-card home-api-proxy" href="/wiki/proxy/plugins/network/transfers/">
 		<span class="home-api-meta"><span>Proxy / Network</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
 		<span class="home-api-title">Transfers</span>
 		<span class="home-api-copy">Move players and parties between servers, with fallbacks.</span>
 	</a>
-	<a class="home-api-card home-api-proxy" href="proxy/plugins/network/sentinel/">
+	<a class="home-api-card home-api-proxy" href="/wiki/proxy/plugins/network/sentinel/">
 		<span class="home-api-meta"><span>Proxy / Network</span><span class="home-api-arrow" aria-hidden="true">↗</span></span>
 		<span class="home-api-title">Sentinel</span>
 		<span class="home-api-copy">Block addresses and guard connections, logins, transfers and commands.</span>
@@ -227,25 +227,25 @@ Six entry points into the reference, from gameplay to the network.
 Four complete plugins in the repository, not fragments: project, manifest, texts and code.
 
 <div class="home-samples">
-	<a class="home-sample home-sample-server" href="sdk/samples/">
+	<a class="home-sample home-sample-server" href="/wiki/sdk/samples/">
 		<span class="home-sample-app">Server</span>
 		<span class="home-sample-name">Hello</span>
 		<span class="home-sample-copy">The life of a plugin, events, a command that waits and a repeating task.</span>
 		<span class="home-sample-link">Open sample <span aria-hidden="true">→</span></span>
 	</a>
-	<a class="home-sample home-sample-server" href="sdk/samples/">
+	<a class="home-sample home-sample-server" href="/wiki/sdk/samples/">
 		<span class="home-sample-app">Server</span>
 		<span class="home-sample-name">Gems</span>
 		<span class="home-sample-copy">A custom item, blocks, recipes, an effect, an enchantment and a mob, in two languages.</span>
 		<span class="home-sample-link">Open sample <span aria-hidden="true">→</span></span>
 	</a>
-	<a class="home-sample home-sample-server" href="sdk/samples/">
+	<a class="home-sample home-sample-server" href="/wiki/sdk/samples/">
 		<span class="home-sample-app">Server</span>
 		<span class="home-sample-name">HubCompass</span>
 		<span class="home-sample-copy">Messages from a server plugin to the proxy, and back.</span>
 		<span class="home-sample-link">Open sample <span aria-hidden="true">→</span></span>
 	</a>
-	<a class="home-sample home-sample-proxy" href="sdk/samples/">
+	<a class="home-sample home-sample-proxy" href="/wiki/sdk/samples/">
 		<span class="home-sample-app">Proxy</span>
 		<span class="home-sample-name">Hub</span>
 		<span class="home-sample-copy">A server selector, a balancer, a delayed welcome and messages from the servers.</span>
@@ -254,6 +254,6 @@ Four complete plugins in the repository, not fragments: project, manifest, texts
 </div>
 
 <div class="home-samples-actions">
-	<LinkButton href="sdk/samples/" variant="primary" icon="right-arrow">Browse the samples</LinkButton>
-	<LinkButton href="server/plugins/basics/getting-started/" variant="minimal" icon="right-arrow">Build from scratch</LinkButton>
+	<LinkButton href="/wiki/sdk/samples/" variant="primary" icon="right-arrow">Browse the samples</LinkButton>
+	<LinkButton href="/wiki/server/plugins/basics/getting-started/" variant="minimal" icon="right-arrow">Build from scratch</LinkButton>
 </div>
